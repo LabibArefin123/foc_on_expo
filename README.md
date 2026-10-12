@@ -1,56 +1,124 @@
-# Welcome to your Expo app 👋
+# FocOn
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**FocOn** is a modern, premium Digital Wellbeing and Focus Management mobile application built with Expo and React Native.
 
-## Get started
+Designed to help users reduce digital distractions, manage social media usage, and stay focused on what truly matters.
 
-1. Install dependencies
+**## Features**
 
-   ```bash
-   npm install
-   ```
+- Premium mobile-first interface
+- Smart Focus Mode activation (ON/OFF)
+- Social media and entertainment app monitoring
+- Select and manage restricted applications
+- Custom app usage limits (5, 10 minutes or custom duration)
+- Individual app-based time restrictions
+- Shared usage limit across selected apps
+- Smart notifications and usage reminders
+- Remaining-time countdown notifications
+- Full-screen app restriction interface
+- Flexible Mode and Strict Mode
+- Configurable focus sessions
+- Daily screen-time overview
+- Focus session history and analytics
+- Persistent local storage
+- Background monitoring through native Android services
+- Smooth animations and transitions
+- Responsive Android and iOS layouts
 
-2. Start the app
+**## Technology Stack**
 
-   ```bash
-   npx expo start
-   ```
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+- React Native StyleSheet
+- AsyncStorage
+- Expo SQLite
+- Expo Notifications
+- React Native Reanimated
+- Expo Development Build
+- Native Android Kotlin
+- Android UsageStatsManager
+- Android Foreground Services
+- Android Notification Manager
+- Android Overlay Permissions
 
-In the output, you'll find options to open the app in a
+**## Installation**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Clone the repository:
 
 ```bash
-npm run reset-project
+git clone https://github.com/YOUR_USERNAME/FocOn.git
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Navigate into the project:
 
-### Other setup steps
+```bash
+cd FocOn
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Install dependencies:
 
-## Learn more
+```bash
+npm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Start the development server:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+**## Development**
 
-Join our community of developers creating universal apps.
+Run on Android:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx expo run:android
+```
+
+Run on iOS:
+
+```bash
+npx expo run:ios
+```
+
+Generate the native Android project:
+
+```bash
+npx expo prebuild --platform android
+```
+
+**Note:** FocOn requires an Expo Development Build and native Android integration for application monitoring and restriction functionality. Expo Go does not support the complete monitoring system.
+
+**## Android Permissions**
+
+FocOn may require the following permissions and user-approved capabilities:
+
+- Usage Access – Monitor application usage.
+- Notification Permission – Display smart notifications.
+- Foreground Service – Maintain background monitoring.
+- Display Over Other Apps – Display the restriction interface when needed.
+- Boot Completed Receiver – Restore monitoring after device restart.
+
+Permissions are requested transparently and only when required by the corresponding features.
+
+**## Project Structure**
+
+- `app/` - Application screens and navigation
+- `components/` - Reusable UI components
+- `services/` - Application services and business logic
+- `services/storage/` - Local database and preferences
+- `services/notifications/` - Smart notification management
+- `services/monitoring/` - Application usage monitoring
+- `constants/` - Application constants and colors
+- `styles/` - Styling and design system
+- `hooks/` - Custom React hooks
+- `types/` - TypeScript definitions
+- `utils/` - Helper functions
+- `android/` - Native Android Kotlin integration
+- `assets/` - Images, fonts, logos, and icons
+
+**## License**
+
+This project is intended for personal learning and development.
