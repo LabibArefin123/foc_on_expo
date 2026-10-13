@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { Alert, ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import AppUsageCard from "@/components/dashboard/AppUsageCard";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import FocusModeCard from "@/components/dashboard/FocusModeCard";
 import ProductivityCard from "@/components/dashboard/ProductivityCard";
-import TodayOverview from "@/components/dashboard/TodayOverview";
-import AppUsageCard from "@/components/dashboard/AppUsageCard";
 import QuickActions from "@/components/dashboard/QuickActions";
-
+import TodayOverview from "@/components/dashboard/TodayOverview";
 import { DASHBOARD_COLORS as C, TODAY_STATS } from "@/constants/dashboard";
+import { useRouter } from "expo-router";
 
 const DEFAULT_SESSION_SECONDS = 25 * 60;
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [focusEnabled, setFocusEnabled] = useState(false);
   const [strictMode, setStrictMode] = useState(false);
   const [sessionActive, setSessionActive] = useState(false);
@@ -120,8 +121,8 @@ export default function HomeScreen() {
 
         {/* Quick Actions */}
         <QuickActions
-          onRestrictionsPress={() => showComingSoon("App restrictions")}
-          onSettingsPress={() => showComingSoon("Focus settings")}
+          onRestrictionsPress={() => router.push("/app-restrictions")}
+          onSettingsPress={() => router.push("/setting-focus")}
         />
       </ScrollView>
     </SafeAreaView>
