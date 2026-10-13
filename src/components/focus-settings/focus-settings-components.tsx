@@ -4,27 +4,36 @@ import { Pressable, Switch, Text, View } from "react-native";
 import { DASHBOARD_COLORS as C } from "@/constants/dashboard";
 
 import type {
-  FocusSettingsHeaderProps,
-  FocusModeSelectorProps,
   DurationSelectorProps,
-  SettingSwitchProps,
-  SessionPreferencesProps,
+  FocusModeSelectorProps,
+  FocusSettingsHeaderProps,
   SavePreferencesProps,
+  SessionPreferencesProps,
+  SettingSwitchProps,
 } from "@/types/focus-settings.types";
 
-import { styles } from "@/styles/focus-settings.styles";
+import { actionStyles } from "@/styles/focus_settings/focus_setting_actions.styles";
+import { durationStyles } from "@/styles/focus_settings/focus_setting_duration.styles";
+import { headerStyles } from "@/styles/focus_settings/focus_setting_header.styles";
+import { introStyles } from "@/styles/focus_settings/focus_setting_intro.styles";
+import { mainStyles } from "@/styles/focus_settings/focus_setting_main.styles";
+import { modeStyles } from "@/styles/focus_settings/focus_setting_mode.styles";
+import { preferencesStyles } from "@/styles/focus_settings/focus_setting_preferences.styles";
 
 // Header
 export function FocusSettingsHeader({ onBack }: FocusSettingsHeaderProps) {
   return (
-    <View style={styles.header}>
-      <Pressable style={styles.backButton} onPress={onBack}>
+    <View style={headerStyles.header}>
+      <Pressable style={headerStyles.backButton} onPress={onBack}>
         <Ionicons name="arrow-back" size={22} color={C.text} />
       </Pressable>
 
-      <View style={styles.headerText}>
-        <Text style={styles.headerTitle}>Focus settings</Text>
-        <Text style={styles.headerSubtitle}>Personalize your productivity</Text>
+      <View style={headerStyles.headerText}>
+        <Text style={headerStyles.headerTitle}>Focus settings</Text>
+
+        <Text style={headerStyles.headerSubtitle}>
+          Personalize your productivity
+        </Text>
       </View>
     </View>
   );
@@ -33,14 +42,14 @@ export function FocusSettingsHeader({ onBack }: FocusSettingsHeaderProps) {
 // Intro
 export function FocusSettingsIntro() {
   return (
-    <View style={styles.introCard}>
-      <View style={styles.introIcon}>
+    <View style={introStyles.introCard}>
+      <View style={introStyles.introIcon}>
         <Ionicons name="options" size={25} color="#FFFFFF" />
       </View>
 
-      <Text style={styles.introTitle}>Make focus work for you</Text>
+      <Text style={introStyles.introTitle}>Make focus work for you</Text>
 
-      <Text style={styles.introDescription}>
+      <Text style={introStyles.introDescription}>
         Customize your sessions, choose your focus style and create a routine
         that fits your lifestyle.
       </Text>
@@ -54,22 +63,25 @@ export function FocusModeSelector({
   onModeChange,
 }: FocusModeSelectorProps) {
   return (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Focus mode</Text>
+    <View style={mainStyles.section}>
+      <Text style={mainStyles.sectionTitle}>Focus mode</Text>
 
-      <Text style={styles.sectionSubtitle}>
+      <Text style={mainStyles.sectionSubtitle}>
         Choose how you want to stay productive
       </Text>
 
-      <View style={styles.modeContainer}>
+      <View style={modeStyles.modeContainer}>
         <Pressable
-          style={[styles.modeCard, mode === "flexible" && styles.selectedMode]}
+          style={[
+            modeStyles.modeCard,
+            mode === "flexible" && modeStyles.selectedMode,
+          ]}
           onPress={() => onModeChange("flexible")}
         >
           <View
             style={[
-              styles.modeIcon,
-              mode === "flexible" && styles.selectedModeIcon,
+              modeStyles.modeIcon,
+              mode === "flexible" && modeStyles.selectedModeIcon,
             ]}
           >
             <Ionicons
@@ -79,27 +91,30 @@ export function FocusModeSelector({
             />
           </View>
 
-          <Text style={styles.modeTitle}>Flexible</Text>
+          <Text style={modeStyles.modeTitle}>Flexible</Text>
 
-          <Text style={styles.modeDescription}>
+          <Text style={modeStyles.modeDescription}>
             Take control with adjustable focus sessions.
           </Text>
 
           {mode === "flexible" && (
-            <View style={styles.selectedIndicator}>
+            <View style={modeStyles.selectedIndicator}>
               <Ionicons name="checkmark-circle" size={18} color={C.primary} />
             </View>
           )}
         </Pressable>
 
         <Pressable
-          style={[styles.modeCard, mode === "strict" && styles.selectedMode]}
+          style={[
+            modeStyles.modeCard,
+            mode === "strict" && modeStyles.selectedMode,
+          ]}
           onPress={() => onModeChange("strict")}
         >
           <View
             style={[
-              styles.modeIcon,
-              mode === "strict" && styles.selectedModeIcon,
+              modeStyles.modeIcon,
+              mode === "strict" && modeStyles.selectedModeIcon,
             ]}
           >
             <Ionicons
@@ -109,14 +124,14 @@ export function FocusModeSelector({
             />
           </View>
 
-          <Text style={styles.modeTitle}>Strict</Text>
+          <Text style={modeStyles.modeTitle}>Strict</Text>
 
-          <Text style={styles.modeDescription}>
+          <Text style={modeStyles.modeDescription}>
             Follow stronger restrictions during focus sessions.
           </Text>
 
           {mode === "strict" && (
-            <View style={styles.selectedIndicator}>
+            <View style={modeStyles.selectedIndicator}>
               <Ionicons name="checkmark-circle" size={18} color={C.primary} />
             </View>
           )}
@@ -137,36 +152,36 @@ export function DurationSelector({
   onDurationChange,
 }: DurationSelectorProps) {
   return (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+    <View style={mainStyles.section}>
+      <Text style={mainStyles.sectionTitle}>{title}</Text>
 
-      <Text style={styles.sectionSubtitle}>{subtitle}</Text>
+      <Text style={mainStyles.sectionSubtitle}>{subtitle}</Text>
 
-      <View style={styles.durationCard}>
-        <View style={styles.durationDisplay}>
+      <View style={durationStyles.durationCard}>
+        <View style={durationStyles.durationDisplay}>
           <Ionicons name={icon} size={25} color={iconColor} />
 
-          <View style={styles.durationText}>
-            <Text style={styles.durationNumber}>{duration}</Text>
+          <View style={durationStyles.durationText}>
+            <Text style={durationStyles.durationNumber}>{duration}</Text>
 
-            <Text style={styles.durationUnit}>MINUTES</Text>
+            <Text style={durationStyles.durationUnit}>MINUTES</Text>
           </View>
         </View>
 
-        <View style={styles.durationOptions}>
+        <View style={durationStyles.durationOptions}>
           {durations.map((item) => (
             <Pressable
               key={item}
               onPress={() => onDurationChange(item)}
               style={[
-                styles.durationButton,
-                duration === item && styles.selectedDuration,
+                durationStyles.durationButton,
+                duration === item && durationStyles.selectedDuration,
               ]}
             >
               <Text
                 style={[
-                  styles.durationButtonText,
-                  duration === item && styles.selectedDurationText,
+                  durationStyles.durationButtonText,
+                  duration === item && durationStyles.selectedDurationText,
                 ]}
               >
                 {item}m
@@ -188,15 +203,15 @@ export function SettingSwitch({
   icon,
 }: SettingSwitchProps) {
   return (
-    <View style={styles.switchRow}>
-      <View style={styles.settingIcon}>
+    <View style={preferencesStyles.switchRow}>
+      <View style={preferencesStyles.settingIcon}>
         <Ionicons name={icon} size={19} color={C.primary} />
       </View>
 
-      <View style={styles.switchInfo}>
-        <Text style={styles.switchTitle}>{title}</Text>
+      <View style={preferencesStyles.switchInfo}>
+        <Text style={preferencesStyles.switchTitle}>{title}</Text>
 
-        <Text style={styles.switchDescription}>{description}</Text>
+        <Text style={preferencesStyles.switchDescription}>{description}</Text>
       </View>
 
       <Switch
@@ -224,14 +239,14 @@ export function SessionPreferences({
   onVibrationChange,
 }: SessionPreferencesProps) {
   return (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Session preferences</Text>
+    <View style={mainStyles.section}>
+      <Text style={mainStyles.sectionTitle}>Session preferences</Text>
 
-      <Text style={styles.sectionSubtitle}>
+      <Text style={mainStyles.sectionSubtitle}>
         Make your focus sessions more comfortable
       </Text>
 
-      <View style={styles.settingsCard}>
+      <View style={preferencesStyles.settingsCard}>
         <SettingSwitch
           icon="cafe-outline"
           title="Automatic breaks"
@@ -240,7 +255,7 @@ export function SessionPreferences({
           onChange={onAutoBreakChange}
         />
 
-        <View style={styles.divider} />
+        <View style={preferencesStyles.divider} />
 
         <SettingSwitch
           icon="notifications-outline"
@@ -250,7 +265,7 @@ export function SessionPreferences({
           onChange={onNotificationsChange}
         />
 
-        <View style={styles.divider} />
+        <View style={preferencesStyles.divider} />
 
         <SettingSwitch
           icon="volume-high-outline"
@@ -260,7 +275,7 @@ export function SessionPreferences({
           onChange={onSoundChange}
         />
 
-        <View style={styles.divider} />
+        <View style={preferencesStyles.divider} />
 
         <SettingSwitch
           icon="phone-portrait-outline"
@@ -279,14 +294,14 @@ export function SavePreferencesButton({ onSave }: SavePreferencesProps) {
   return (
     <Pressable
       style={({ pressed }) => [
-        styles.saveButton,
-        pressed && styles.saveButtonPressed,
+        actionStyles.saveButton,
+        pressed && actionStyles.saveButtonPressed,
       ]}
       onPress={onSave}
     >
       <Ionicons name="checkmark-circle-outline" size={20} color="#FFFFFF" />
 
-      <Text style={styles.saveButtonText}>Save preferences</Text>
+      <Text style={actionStyles.saveButtonText}>Save preferences</Text>
     </Pressable>
   );
 }
@@ -294,7 +309,7 @@ export function SavePreferencesButton({ onSave }: SavePreferencesProps) {
 // Footer
 export function FocusSettingsFooter() {
   return (
-    <Text style={styles.footer}>
+    <Text style={actionStyles.footer}>
       Build better habits, one focused session at a time.
     </Text>
   );

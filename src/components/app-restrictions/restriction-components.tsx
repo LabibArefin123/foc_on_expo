@@ -2,24 +2,30 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Switch, Text, View } from "react-native";
 
 import { DASHBOARD_COLORS as C } from "@/constants/dashboard";
+
 import type {
   RestrictionsHeaderProps,
   RestrictionsSummaryProps,
   RestrictedAppCardProps,
 } from "@/types/app-restrictions.types";
-import { styles } from "@/styles/app-restrictions.styles";
+
+import { headerStyles } from "@/styles/app_restrictions/app_restrict_header.styles";
+import { summaryStyles } from "@/styles/app_restrictions/app_restrict_summary.styles";
+import { cardStyles } from "@/styles/app_restrictions/app_restrict_card.styles";
+import { infoStyles } from "@/styles/app_restrictions/app_restrict_info.styles";
 
 // Header
 export function RestrictionsHeader({ onBack }: RestrictionsHeaderProps) {
   return (
-    <View style={styles.header}>
-      <Pressable style={styles.backButton} onPress={onBack}>
+    <View style={headerStyles.header}>
+      <Pressable style={headerStyles.backButton} onPress={onBack}>
         <Ionicons name="arrow-back" size={22} color={C.text} />
       </Pressable>
 
-      <View style={styles.headerText}>
-        <Text style={styles.headerTitle}>App restrictions</Text>
-        <Text style={styles.headerSubtitle}>
+      <View style={headerStyles.headerText}>
+        <Text style={headerStyles.headerTitle}>App restrictions</Text>
+
+        <Text style={headerStyles.headerSubtitle}>
           Take control of your screen time
         </Text>
       </View>
@@ -35,33 +41,35 @@ export function RestrictionsSummary({
   onMasterChange,
 }: RestrictionsSummaryProps) {
   return (
-    <View style={styles.summaryCard}>
-      <View style={styles.summaryTop}>
+    <View style={summaryStyles.summaryCard}>
+      <View style={summaryStyles.summaryTop}>
         <View>
-          <Text style={styles.summaryLabel}>PROTECTED APPS</Text>
+          <Text style={summaryStyles.summaryLabel}>PROTECTED APPS</Text>
 
-          <Text style={styles.summaryNumber}>
+          <Text style={summaryStyles.summaryNumber}>
             {activeApps}
-            <Text style={styles.summaryTotal}> / {totalApps}</Text>
+            <Text style={summaryStyles.summaryTotal}> / {totalApps}</Text>
           </Text>
 
-          <Text style={styles.summaryDescription}>
+          <Text style={summaryStyles.summaryDescription}>
             Apps currently selected for restrictions
           </Text>
         </View>
 
-        <View style={styles.summaryIcon}>
+        <View style={summaryStyles.summaryIcon}>
           <Ionicons name="shield-checkmark" size={29} color="#FFFFFF" />
         </View>
       </View>
 
-      <View style={styles.summaryDivider} />
+      <View style={summaryStyles.summaryDivider} />
 
-      <View style={styles.masterRow}>
-        <View style={styles.masterInfo}>
-          <Text style={styles.masterTitle}>Enable all restrictions</Text>
+      <View style={summaryStyles.masterRow}>
+        <View style={summaryStyles.masterInfo}>
+          <Text style={summaryStyles.masterTitle}>Enable all restrictions</Text>
 
-          <Text style={styles.masterSubtitle}>Control your selected apps</Text>
+          <Text style={summaryStyles.masterSubtitle}>
+            Control your selected apps
+          </Text>
         </View>
 
         <Switch
@@ -90,16 +98,20 @@ export function RestrictedAppCard({
   const controlsDisabled = !masterEnabled || !app.enabled;
 
   return (
-    <View style={styles.appCard}>
-      <View style={styles.appHeader}>
-        <View style={[styles.appIcon, { backgroundColor: `${app.color}18` }]}>
+    <View style={cardStyles.appCard}>
+      <View style={cardStyles.appHeader}>
+        <View
+          style={[cardStyles.appIcon, { backgroundColor: `${app.color}18` }]}
+        >
           <Ionicons name={app.icon} size={23} color={app.color} />
         </View>
 
-        <View style={styles.appInfo}>
-          <Text style={styles.appName}>{app.name}</Text>
+        <View style={cardStyles.appInfo}>
+          <Text style={cardStyles.appName}>{app.name}</Text>
 
-          <Text style={styles.appUsage}>{app.minutes} minutes used today</Text>
+          <Text style={cardStyles.appUsage}>
+            {app.minutes} minutes used today
+          </Text>
         </View>
 
         <Switch
@@ -114,19 +126,19 @@ export function RestrictedAppCard({
         />
       </View>
 
-      <View style={styles.usageSection}>
-        <View style={styles.usageHeader}>
-          <Text style={styles.usageLabel}>DAILY USAGE</Text>
+      <View style={cardStyles.usageSection}>
+        <View style={cardStyles.usageHeader}>
+          <Text style={cardStyles.usageLabel}>DAILY USAGE</Text>
 
-          <Text style={styles.usageValue}>
+          <Text style={cardStyles.usageValue}>
             {app.minutes} / {app.limit} min
           </Text>
         </View>
 
-        <View style={styles.progressBackground}>
+        <View style={cardStyles.progressBackground}>
           <View
             style={[
-              styles.progress,
+              cardStyles.progress,
               {
                 width: `${percentage}%`,
                 backgroundColor: percentage >= 85 ? C.danger : C.primary,
@@ -136,14 +148,14 @@ export function RestrictedAppCard({
         </View>
       </View>
 
-      <View style={styles.limitRow}>
-        <Text style={styles.limitLabel}>Daily time limit</Text>
+      <View style={cardStyles.limitRow}>
+        <Text style={cardStyles.limitLabel}>Daily time limit</Text>
 
-        <View style={styles.limitControls}>
+        <View style={cardStyles.limitControls}>
           <Pressable
             style={[
-              styles.limitButton,
-              controlsDisabled && styles.disabledButton,
+              cardStyles.limitButton,
+              controlsDisabled && cardStyles.disabledButton,
             ]}
             onPress={() => onLimitChange(app, -5)}
             disabled={controlsDisabled || app.limit <= 5}
@@ -151,12 +163,12 @@ export function RestrictedAppCard({
             <Ionicons name="remove" size={18} color={C.text} />
           </Pressable>
 
-          <Text style={styles.limitValue}>{app.limit} min</Text>
+          <Text style={cardStyles.limitValue}>{app.limit} min</Text>
 
           <Pressable
             style={[
-              styles.limitButton,
-              controlsDisabled && styles.disabledButton,
+              cardStyles.limitButton,
+              controlsDisabled && cardStyles.disabledButton,
             ]}
             onPress={() => onLimitChange(app, 5)}
             disabled={controlsDisabled || app.limit >= 240}
@@ -172,10 +184,10 @@ export function RestrictedAppCard({
 // Information
 export function RestrictionsInfo() {
   return (
-    <View style={styles.infoCard}>
+    <View style={infoStyles.infoCard}>
       <Ionicons name="information-circle-outline" size={21} color={C.primary} />
 
-      <Text style={styles.infoText}>
+      <Text style={infoStyles.infoText}>
         App limits are currently stored locally in this screen. Android usage
         monitoring and actual app blocking require native permissions and
         integration.

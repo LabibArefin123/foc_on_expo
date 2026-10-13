@@ -1,27 +1,27 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
 
 import { DASHBOARD_COLORS as C } from "@/constants/dashboard";
 
 import {
+  BREAK_DURATIONS,
   DEFAULT_FOCUS_SETTINGS,
   FOCUS_DURATIONS,
-  BREAK_DURATIONS,
 } from "@/constants/focus-settings";
 
 import {
+  DurationSelector,
+  FocusModeSelector,
+  FocusSettingsFooter,
   FocusSettingsHeader,
   FocusSettingsIntro,
-  FocusModeSelector,
-  DurationSelector,
-  SessionPreferences,
   SavePreferencesButton,
-  FocusSettingsFooter,
+  SessionPreferences,
 } from "@/components/focus-settings/focus-settings-components";
 
-import { styles } from "@/styles/focus-settings.styles";
+import { mainStyles } from "@/styles/focus_settings/focus_setting_main.styles";
 
 import type { FocusMode } from "@/types/focus-settings.types";
 
@@ -61,12 +61,12 @@ export default function FocusSettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={mainStyles.safeArea} edges={["top"]}>
       <StatusBar barStyle="dark-content" backgroundColor={C.background} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={mainStyles.content}
       >
         {/* Header */}
         <FocusSettingsHeader onBack={() => router.back()} />
