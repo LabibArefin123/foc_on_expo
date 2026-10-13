@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import AppUsageCard from "@/components/dashboard/AppUsageCard";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import FocusModeCard from "@/components/dashboard/FocusModeCard";
+import NotificationContent from "@/components/dashboard/notification-content";
 import ProductivityCard from "@/components/dashboard/ProductivityCard";
 import QuickActions from "@/components/dashboard/QuickActions";
 import TodayOverview from "@/components/dashboard/TodayOverview";
@@ -25,52 +27,61 @@ export default function DashboardScreenContent({
   handleFocusToggle,
   handleStartPause,
   handleModeChange,
-  showComingSoon,
   onRestrictionsPress,
   onSettingsPress,
 }: DashboardContentProps) {
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
+
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Dashboard header */}
-      <DashboardHeader
-        onNotificationPress={() => showComingSoon("Notifications")}
+    <>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Dashboard header */}
+        <DashboardHeader
+          onNotificationPress={() => setNotificationsVisible(true)}
+        />
+
+        {/* Focus mode */}
+        <FocusModeCard
+          enabled={focusEnabled}
+          onToggle={handleFocusToggle}
+          strictMode={strictMode}
+          onModeChange={handleModeChange}
+          sessionActive={sessionActive}
+          remainingSeconds={remainingSeconds}
+          onStartPause={handleStartPause}
+        />
+
+        {/* Daily overview */}
+        <TodayOverview
+          focusMinutes={TODAY_STATS.focusMinutes}
+          distractionMinutes={TODAY_STATS.distractionMinutes}
+          completedSessions={TODAY_STATS.completedSessions}
+        />
+
+        {/* Productivity score */}
+        <View style={styles.productivityWrapper}>
+          <ProductivityCard score={TODAY_STATS.productivityScore} />
+        </View>
+
+        {/* Most used apps */}
+        <AppUsageCard />
+
+        {/* Quick actions */}
+        <QuickActions
+          onRestrictionsPress={onRestrictionsPress}
+          onSettingsPress={onSettingsPress}
+        />
+      </ScrollView>
+
+      {/* Floating notifications */}
+      <NotificationContent
+        visible={notificationsVisible}
+        onClose={() => setNotificationsVisible(false)}
       />
-
-      {/* Focus mode */}
-      <FocusModeCard
-        enabled={focusEnabled}
-        onToggle={handleFocusToggle}
-        strictMode={strictMode}
-        onModeChange={handleModeChange}
-        sessionActive={sessionActive}
-        remainingSeconds={remainingSeconds}
-        onStartPause={handleStartPause}
-      />
-
-      {/* Daily overview */}
-      <TodayOverview
-        focusMinutes={TODAY_STATS.focusMinutes}
-        distractionMinutes={TODAY_STATS.distractionMinutes}
-        completedSessions={TODAY_STATS.completedSessions}
-      />
-
-      {/* Productivity score */}
-      <View style={styles.productivityWrapper}>
-        <ProductivityCard score={TODAY_STATS.productivityScore} />
-      </View>
-
-      {/* Most used apps */}
-      <AppUsageCard />
-
-      {/* Quick actions */}
-      <QuickActions
-        onRestrictionsPress={onRestrictionsPress}
-        onSettingsPress={onSettingsPress}
-      />
-    </ScrollView>
+    </>
   );
 }
