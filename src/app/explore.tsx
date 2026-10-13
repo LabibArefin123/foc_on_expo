@@ -1,180 +1,239 @@
-import { Image } from 'expo-image';
-import { SymbolView } from 'expo-symbols';
-import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { ExternalLink } from '@/components/external-link';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Collapsible } from '@/components/ui/collapsible';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { DASHBOARD_COLORS as C, TODAY_STATS } from "@/constants/dashboard";
 
-export default function TabTwoScreen() {
-  const safeAreaInsets = useSafeAreaInsets();
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
-  };
-  const theme = useTheme();
-
-  const contentPlatformStyle = Platform.select({
-    android: {
-      paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
-      paddingBottom: insets.bottom,
-    },
-    web: {
-      paddingTop: Spacing.six,
-      paddingBottom: Spacing.four,
-    },
-  });
-
+export default function ExploreScreen() {
   return (
-    <ScrollView
-      style={[styles.scrollView, { backgroundColor: theme.background }]}
-      contentInset={insets}
-      contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="subtitle">Explore</ThemedText>
-          <ThemedText style={styles.centerText} themeColor="textSecondary">
-            This starter app includes example{'\n'}code to help you get started.
-          </ThemedText>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
+        <View style={styles.header}>
+          <Text style={styles.title}>Your Progress</Text>
+          <Text style={styles.subtitle}>
+            Understand your digital habits and build better ones.
+          </Text>
+        </View>
 
-          <ExternalLink href="https://docs.expo.dev" asChild>
-            <Pressable style={({ pressed }) => pressed && styles.pressed}>
-              <ThemedView type="backgroundElement" style={styles.linkButton}>
-                <ThemedText type="link">Expo documentation</ThemedText>
-                <SymbolView
-                  tintColor={theme.text}
-                  name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-                  size={12}
-                />
-              </ThemedView>
-            </Pressable>
-          </ExternalLink>
-        </ThemedView>
+        <View style={styles.highlightCard}>
+          <View style={styles.highlightIcon}>
+            <Ionicons name="analytics" size={24} color="#FFFFFF" />
+          </View>
 
-        <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
-            <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
-            </ThemedText>
-            <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <Text style={styles.highlightLabel}>TODAY'S PRODUCTIVITY SCORE</Text>
 
-          <Collapsible title="Android, iOS, and web support">
-            <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-              <ThemedText type="small">
-                You can open this project on Android, iOS, and the web. To open the web version,
-                press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-                project.
-              </ThemedText>
-              <Image
-                source={require('@/assets/images/tutorial-web.png')}
-                style={styles.imageTutorial}
-              />
-            </ThemedView>
-          </Collapsible>
+          <Text style={styles.highlightScore}>
+            {TODAY_STATS.productivityScore}
+            <Text style={styles.highlightOutOf}> / 100</Text>
+          </Text>
 
-          <Collapsible title="Images">
-            <ThemedText type="small">
-              For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-              <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-              screen densities.
-            </ThemedText>
-            <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-            <ExternalLink href="https://reactnative.dev/docs/images">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+          <Text style={styles.highlightDescription}>
+            Every focused minute is a step forward.
+          </Text>
+        </View>
 
-          <Collapsible title="Light and dark mode components">
-            <ThemedText type="small">
-              This template has light and dark mode support. The{' '}
-              <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-              user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-            </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-              <ThemedText type="linkPrimary">Learn more</ThemedText>
-            </ExternalLink>
-          </Collapsible>
+        <Text style={styles.sectionTitle}>Today's statistics</Text>
 
-          <Collapsible title="Animations">
-            <ThemedText type="small">
-              This template includes an example of an animated component. The{' '}
-              <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-              the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-              animate opening this hint.
-            </ThemedText>
-          </Collapsible>
-        </ThemedView>
-        {Platform.OS === 'web' && <WebBadge />}
-      </ThemedView>
-    </ScrollView>
+        <View style={styles.statsContainer}>
+          <StatItem
+            icon="time-outline"
+            label="Focus time"
+            value={`${Math.floor(TODAY_STATS.focusMinutes / 60)}h ${
+              TODAY_STATS.focusMinutes % 60
+            }m`}
+            color={C.primary}
+            background="#EFEDFF"
+          />
+
+          <StatItem
+            icon="phone-portrait-outline"
+            label="Distraction time"
+            value={`${TODAY_STATS.distractionMinutes}m`}
+            color={C.warning}
+            background="#FFF4E4"
+          />
+
+          <StatItem
+            icon="checkmark-circle-outline"
+            label="Completed sessions"
+            value={String(TODAY_STATS.completedSessions)}
+            color={C.success}
+            background="#E7F8F0"
+          />
+        </View>
+
+        <View style={styles.comingCard}>
+          <View style={styles.comingIcon}>
+            <Ionicons name="bar-chart-outline" size={25} color={C.primary} />
+          </View>
+
+          <Text style={styles.comingTitle}>More insights are coming</Text>
+
+          <Text style={styles.comingDescription}>
+            Weekly screen-time reports, app usage breakdown, focus history and
+            productivity trends will appear here.
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+interface StatItemProps {
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  label: string;
+  value: string;
+  color: string;
+  background: string;
+}
+
+function StatItem({ icon, label, value, color, background }: StatItemProps) {
+  return (
+    <View style={styles.statCard}>
+      <View style={[styles.statIcon, { backgroundColor: background }]}>
+        <Ionicons name={icon} size={21} color={color} />
+      </View>
+
+      <View style={styles.statContent}>
+        <Text style={styles.statLabel}>{label}</Text>
+        <Text style={styles.statValue}>{value}</Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  safeArea: {
+    flex: 1,
+    backgroundColor: C.background,
+  },
+  content: {
+    paddingHorizontal: 21,
+    paddingTop: 25,
+    paddingBottom: 35,
+  },
+  header: {
+    marginBottom: 23,
+  },
+  title: {
+    fontSize: 27,
+    fontWeight: "800",
+    color: C.text,
+    letterSpacing: -0.8,
+  },
+  subtitle: {
+    fontSize: 13,
+    color: C.secondary,
+    lineHeight: 20,
+    marginTop: 7,
+  },
+  highlightCard: {
+    backgroundColor: C.dark,
+    borderRadius: 24,
+    padding: 23,
+    marginBottom: 27,
+  },
+  highlightIcon: {
+    width: 46,
+    height: 46,
+    backgroundColor: C.primary,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 23,
+  },
+  highlightLabel: {
+    color: "#B3B3C6",
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 1.2,
+  },
+  highlightScore: {
+    color: "#FFFFFF",
+    fontSize: 52,
+    fontWeight: "800",
+    marginTop: 8,
+  },
+  highlightOutOf: {
+    color: "#A5A6B9",
+    fontSize: 19,
+    fontWeight: "500",
+  },
+  highlightDescription: {
+    color: "#B3B3C6",
+    fontSize: 12,
+    marginTop: 8,
+  },
+  sectionTitle: {
+    color: C.text,
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 14,
+  },
+  statsContainer: {
+    gap: 11,
+  },
+  statCard: {
+    backgroundColor: C.surface,
+    borderRadius: 18,
+    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: C.border,
+  },
+  statIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statContent: {
+    marginLeft: 13,
     flex: 1,
   },
-  contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  statLabel: {
+    color: C.secondary,
+    fontSize: 12,
   },
-  container: {
-    maxWidth: MaxContentWidth,
-    flexGrow: 1,
+  statValue: {
+    color: C.text,
+    fontSize: 18,
+    fontWeight: "800",
+    marginTop: 4,
   },
-  titleContainer: {
-    gap: Spacing.three,
-    alignItems: 'center',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.six,
+  comingCard: {
+    backgroundColor: C.surface,
+    borderRadius: 21,
+    padding: 21,
+    alignItems: "center",
+    marginTop: 25,
+    borderWidth: 1,
+    borderColor: C.border,
   },
-  centerText: {
-    textAlign: 'center',
+  comingIcon: {
+    width: 51,
+    height: 51,
+    borderRadius: 17,
+    backgroundColor: "#EFEDFF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 13,
   },
-  pressed: {
-    opacity: 0.7,
+  comingTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: C.text,
   },
-  linkButton: {
-    flexDirection: 'row',
-    paddingHorizontal: Spacing.four,
-    paddingVertical: Spacing.two,
-    borderRadius: Spacing.five,
-    justifyContent: 'center',
-    gap: Spacing.one,
-    alignItems: 'center',
-  },
-  sectionsWrapper: {
-    gap: Spacing.five,
-    paddingHorizontal: Spacing.four,
-    paddingTop: Spacing.three,
-  },
-  collapsibleContent: {
-    alignItems: 'center',
-  },
-  imageTutorial: {
-    width: '100%',
-    aspectRatio: 296 / 171,
-    borderRadius: Spacing.three,
-    marginTop: Spacing.two,
-  },
-  imageReact: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+  comingDescription: {
+    fontSize: 12,
+    lineHeight: 19,
+    color: C.secondary,
+    textAlign: "center",
+    marginTop: 9,
   },
 });

@@ -1,98 +1,147 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import FocusModeCard from "@/components/dashboard/FocusModeCard";
+import ProductivityCard from "@/components/dashboard/ProductivityCard";
+import TodayOverview from "@/components/dashboard/TodayOverview";
+import AppUsageCard from "@/components/dashboard/AppUsageCard";
+import QuickActions from "@/components/dashboard/QuickActions";
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { DASHBOARD_COLORS as C, TODAY_STATS } from "@/constants/dashboard";
+
+const DEFAULT_SESSION_SECONDS = 25 * 60;
 
 export default function HomeScreen() {
+  const [focusEnabled, setFocusEnabled] = useState(false);
+  const [strictMode, setStrictMode] = useState(false);
+  const [sessionActive, setSessionActive] = useState(false);
+
+  const [remainingSeconds, setRemainingSeconds] = useState(
+    DEFAULT_SESSION_SECONDS,
+  );
+
+  // Focus session countdown
+  useEffect(() => {
+    if (!sessionActive) return;
+
+    const interval = setInterval(() => {
+      setRemainingSeconds((previous) => previous - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [sessionActive]);
+
+  // Handle session completion
+  useEffect(() => {
+    if (remainingSeconds !== 0 || !sessionActive) return;
+
+    setSessionActive(false);
+
+    Alert.alert(
+      "Focus session completed! 🎉",
+      "Amazing work! You've completed your focus session.",
+    );
+  }, [remainingSeconds, sessionActive]);
+
+  // Focus Mode ON/OFF
+  const handleFocusToggle = (value: boolean) => {
+    setFocusEnabled(value);
+
+    if (!value) {
+      setSessionActive(false);
+    }
+  };
+
+  // Start / Pause session
+  const handleStartPause = () => {
+    if (!focusEnabled) return;
+
+    if (remainingSeconds <= 0) {
+      setRemainingSeconds(DEFAULT_SESSION_SECONDS);
+    }
+
+    setSessionActive((previous) => !previous);
+  };
+
+  // Flexible / Strict mode
+  const handleModeChange = () => {
+    setStrictMode((previous) => !previous);
+  };
+
+  // Temporary navigation actions
+  const showComingSoon = (feature: string) => {
+    Alert.alert(
+      "Coming soon",
+      `${feature} will be available in an upcoming FocOn update.`,
+    );
+  };
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <StatusBar barStyle="dark-content" backgroundColor={C.background} />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Dashboard Header */}
+        <DashboardHeader
+          onNotificationPress={() => showComingSoon("Notifications")}
+        />
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        {/* Focus Mode */}
+        <FocusModeCard
+          enabled={focusEnabled}
+          onToggle={handleFocusToggle}
+          strictMode={strictMode}
+          onModeChange={handleModeChange}
+          sessionActive={sessionActive}
+          remainingSeconds={remainingSeconds}
+          onStartPause={handleStartPause}
+        />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        {/* Daily Overview */}
+        <TodayOverview
+          focusMinutes={TODAY_STATS.focusMinutes}
+          distractionMinutes={TODAY_STATS.distractionMinutes}
+          completedSessions={TODAY_STATS.completedSessions}
+        />
+
+        {/* Productivity Score */}
+        <View style={styles.productivityWrapper}>
+          <ProductivityCard score={TODAY_STATS.productivityScore} />
+        </View>
+
+        {/* Most Used Apps */}
+        <AppUsageCard />
+
+        {/* Quick Actions */}
+        <QuickActions
+          onRestrictionsPress={() => showComingSoon("App restrictions")}
+          onSettingsPress={() => showComingSoon("Focus settings")}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    backgroundColor: C.background,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  scrollView: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
   },
-  title: {
-    textAlign: 'center',
+  scrollContent: {
+    paddingHorizontal: 21,
+    paddingTop: 15,
+    paddingBottom: 35,
   },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  productivityWrapper: {
+    marginBottom: 25,
   },
 });
