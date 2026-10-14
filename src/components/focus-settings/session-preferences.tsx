@@ -3,14 +3,14 @@ import { Pressable, Switch, Text, View } from "react-native";
 
 import { DASHBOARD_COLORS as C } from "@/constants/dashboard";
 
+import { actionStyles } from "@/styles/focus_settings/focus_setting_actions.styles";
 import { mainStyles } from "@/styles/focus_settings/focus_setting_main.styles";
 import { preferencesStyles } from "@/styles/focus_settings/focus_setting_preferences.styles";
-import { actionStyles } from "@/styles/focus_settings/focus_setting_actions.styles";
 
 import type {
-  SettingSwitchProps,
-  SessionPreferencesProps,
   SavePreferencesProps,
+  SessionPreferencesProps,
+  SettingSwitchProps,
 } from "@/types/focus-settings.types";
 
 // Individual preference switch

@@ -4,14 +4,21 @@ import { Pressable, Switch, Text, View } from "react-native";
 import { DASHBOARD_COLORS as C } from "@/constants/dashboard";
 
 import type {
+  RestrictedAppCardProps,
   RestrictionsHeaderProps,
   RestrictionsSummaryProps,
-  RestrictedAppCardProps,
 } from "@/types/app-restrictions.types";
 
 import { headerStyles } from "@/styles/app_restrictions/app_restrict_header.styles";
 import { summaryStyles } from "@/styles/app_restrictions/app_restrict_summary.styles";
-import { cardStyles } from "@/styles/app_restrictions/app_restrict_card.styles";
+
+import {
+  cardLimitStyles,
+  cardMainStyles,
+  cardProgressStyles,
+  cardUsageStyles,
+} from "@/styles/app_restrictions/app_restrict_card.styles";
+
 import { infoStyles } from "@/styles/app_restrictions/app_restrict_info.styles";
 
 // Header
@@ -24,7 +31,6 @@ export function RestrictionsHeader({ onBack }: RestrictionsHeaderProps) {
 
       <View style={headerStyles.headerText}>
         <Text style={headerStyles.headerTitle}>App restrictions</Text>
-
         <Text style={headerStyles.headerSubtitle}>
           Take control of your screen time
         </Text>
@@ -66,7 +72,6 @@ export function RestrictionsSummary({
       <View style={summaryStyles.masterRow}>
         <View style={summaryStyles.masterInfo}>
           <Text style={summaryStyles.masterTitle}>Enable all restrictions</Text>
-
           <Text style={summaryStyles.masterSubtitle}>
             Control your selected apps
           </Text>
@@ -75,10 +80,7 @@ export function RestrictionsSummary({
         <Switch
           value={masterEnabled}
           onValueChange={onMasterChange}
-          trackColor={{
-            false: "#D8D9E3",
-            true: "#A89EFF",
-          }}
+          trackColor={{ false: "#D8D9E3", true: "#A89EFF" }}
           thumbColor="#FFFFFF"
         />
       </View>
@@ -94,22 +96,23 @@ export function RestrictedAppCard({
   onLimitChange,
 }: RestrictedAppCardProps) {
   const percentage = Math.min((app.minutes / app.limit) * 100, 100);
-
   const controlsDisabled = !masterEnabled || !app.enabled;
 
   return (
-    <View style={cardStyles.appCard}>
-      <View style={cardStyles.appHeader}>
+    <View style={cardMainStyles.appCard}>
+      <View style={cardMainStyles.appHeader}>
         <View
-          style={[cardStyles.appIcon, { backgroundColor: `${app.color}18` }]}
+          style={[
+            cardMainStyles.appIcon,
+            { backgroundColor: `${app.color}18` },
+          ]}
         >
           <Ionicons name={app.icon} size={23} color={app.color} />
         </View>
 
-        <View style={cardStyles.appInfo}>
-          <Text style={cardStyles.appName}>{app.name}</Text>
-
-          <Text style={cardStyles.appUsage}>
+        <View style={cardMainStyles.appInfo}>
+          <Text style={cardMainStyles.appName}>{app.name}</Text>
+          <Text style={cardMainStyles.appUsage}>
             {app.minutes} minutes used today
           </Text>
         </View>
@@ -118,27 +121,23 @@ export function RestrictedAppCard({
           value={app.enabled}
           onValueChange={(value) => onAppChange(app.id, value)}
           disabled={!masterEnabled}
-          trackColor={{
-            false: "#D8D9E3",
-            true: "#A89EFF",
-          }}
+          trackColor={{ false: "#D8D9E3", true: "#A89EFF" }}
           thumbColor="#FFFFFF"
         />
       </View>
 
-      <View style={cardStyles.usageSection}>
-        <View style={cardStyles.usageHeader}>
-          <Text style={cardStyles.usageLabel}>DAILY USAGE</Text>
-
-          <Text style={cardStyles.usageValue}>
+      <View style={cardUsageStyles.usageSection}>
+        <View style={cardUsageStyles.usageHeader}>
+          <Text style={cardUsageStyles.usageLabel}>DAILY USAGE</Text>
+          <Text style={cardUsageStyles.usageValue}>
             {app.minutes} / {app.limit} min
           </Text>
         </View>
 
-        <View style={cardStyles.progressBackground}>
+        <View style={cardProgressStyles.progressBackground}>
           <View
             style={[
-              cardStyles.progress,
+              cardProgressStyles.progress,
               {
                 width: `${percentage}%`,
                 backgroundColor: percentage >= 85 ? C.danger : C.primary,
@@ -148,14 +147,14 @@ export function RestrictedAppCard({
         </View>
       </View>
 
-      <View style={cardStyles.limitRow}>
-        <Text style={cardStyles.limitLabel}>Daily time limit</Text>
+      <View style={cardLimitStyles.limitRow}>
+        <Text style={cardLimitStyles.limitLabel}>Daily time limit</Text>
 
-        <View style={cardStyles.limitControls}>
+        <View style={cardLimitStyles.limitControls}>
           <Pressable
             style={[
-              cardStyles.limitButton,
-              controlsDisabled && cardStyles.disabledButton,
+              cardLimitStyles.limitButton,
+              controlsDisabled && cardLimitStyles.disabledButton,
             ]}
             onPress={() => onLimitChange(app, -5)}
             disabled={controlsDisabled || app.limit <= 5}
@@ -163,12 +162,12 @@ export function RestrictedAppCard({
             <Ionicons name="remove" size={18} color={C.text} />
           </Pressable>
 
-          <Text style={cardStyles.limitValue}>{app.limit} min</Text>
+          <Text style={cardLimitStyles.limitValue}>{app.limit} min</Text>
 
           <Pressable
             style={[
-              cardStyles.limitButton,
-              controlsDisabled && cardStyles.disabledButton,
+              cardLimitStyles.limitButton,
+              controlsDisabled && cardLimitStyles.disabledButton,
             ]}
             onPress={() => onLimitChange(app, 5)}
             disabled={controlsDisabled || app.limit >= 240}
